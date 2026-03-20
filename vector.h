@@ -51,10 +51,10 @@ public:
     }
 
 
-    // const T& operator[](int i) const {
-    //     if (i < 0 || i >= sz) error("index out of range");
-    //     return v[i];
-    // }
+    const T& operator[](int i) const {
+        if (i < 0 || i >= sz) error("index out of range");
+        return v[i];
+    }
 
     inline T& elem(int i) {
         return v[i];
@@ -117,7 +117,7 @@ public:
         std::cout << "[";
         // printf("[");
         for (int i = 0; i<s; i++) {
-            elem(i).print();
+            std::cout << elem(i);
             if (i < s - 1) std::cout << ", ";
         }
         std::cout << "]" << std::endl;
@@ -131,3 +131,14 @@ public:
 
 
 
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const vector<T>& v) {
+    int s = v.size();
+    os << "[";
+    for (int i = 0; i < s; i++) {
+        os << v[i];
+        if (i < s - 1) os << ", ";
+    }
+    os << "]";
+    return os;
+}

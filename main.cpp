@@ -1,7 +1,7 @@
 //
 // Created by Arseny on 11/03/2026.
 //
-// #include <algorithm> // std::move
+// #include <algorithm> // std::move (для перемещения ресурсов вместо копирования)
 #include "vector.h"
 #include "mySatur.h"
 
@@ -27,7 +27,16 @@ int main() {
     mySatur test = res2.lm(); //возвращает ссылкой последний элемент без проверок
     test.print();
 
-    vector<int> l1(3), l2(123);
+    vector<int> l1(3); // встроенный int
+    l1[0] = 1; l1[1] = 2; l1[2] = 3;
+    l1.print();
+
+    vector<float> l2(3); // встроенный float
+    l2[1] = 2.34; l2[2] = 67.34;
+    l2.print();
+
+    vector<vector<int>> mnogomernich(2);
+    mnogomernich.print(); //ya nichego ne ponimau
 
     return 0;
 }

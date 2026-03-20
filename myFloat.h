@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 class myFloat {
 protected:
@@ -18,4 +19,8 @@ public:
     friend bool operator>(myFloat a, myFloat b);
     friend bool operator<(myFloat a, myFloat b);
 
+
+
+    friend std::ostream& operator<<(std::ostream& os, const myFloat& mF); //mF == myFloat
+    //ostream& - тип потока данных вывода (stdout), operator<< - перегрузка оператора вывода, os - объект потока, mF - объект myFloat для вывода
 };

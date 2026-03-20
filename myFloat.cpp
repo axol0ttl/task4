@@ -77,9 +77,14 @@ myFloat::myFloat(int a,int b){
     //убираем незначащие нули
 }
 
-void myFloat::print(){
+void myFloat::print() {
+    printf("%d.%04d\n", c, abs(d));
+}
+
+std::ostream& operator<<(std::ostream& os, const myFloat& mF) {
     // std::cout<< c << abs(d) << std::endl;
-    printf("%d.%04d", c, abs(d));
+    printf("%d.%04d", mF.c, abs(mF.d));
+    return os;
     }
 
     
