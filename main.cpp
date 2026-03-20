@@ -36,7 +36,10 @@ int main() {
     l2.print();
 
     vector<vector<int>> mnogomernich(2);
-    mnogomernich.print(); //ya nichego ne ponimau
+    mnogomernich.print();
+    //там получается много нулей, т.к. мы изначально
+    //инициализируем вектор с 99 значениями
+
 
     return 0;
 }
