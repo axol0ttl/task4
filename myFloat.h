@@ -21,6 +21,7 @@ public:
 
 
 
-    friend std::ostream& operator<<(std::ostream& os, const myFloat& mF); //mF == myFloat
+  //friend std::ostream& operator<<(std::ostream& os, const myFloat& mF); //mF == myFloat
     //ostream& - тип потока данных вывода (stdout), operator<< - перегрузка оператора вывода, os - объект потока, mF - объект myFloat для вывода
+    //надо написать чет свое для vector
 };

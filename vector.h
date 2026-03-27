@@ -4,14 +4,20 @@
 #include "mySatur.h"
 
 
-void error(const char* msg);
+void error(const char* msg);//????? throw + catch
 
 template <typename T>
 class vector;
 
+inline std::ostream& operator<<(std::ostream& os, mySatur& x) { // cout для vector<mySatur>
+    x.print();
+    return os;
+}
+
 template <typename T>
-inline vector<T>&& lvalue_to_rvalue(vector<T>& x) {
-    return (vector<T>&&) x;
+inline std::ostream& operator<<(std::ostream& os, vector<T>& x) { // cout для vector<vector>
+    x.print_for_matrix();
+    return os;
 }
 
 template <typename T>
@@ -30,6 +36,26 @@ public:
         sz = 99;
         v = new T[sz];
     }
+
+    vector(vector const& other) {
+        sz = other.sz;
+        v = new T[sz];
+        if (v == 0) error("out of memory");
+        for (int i = 0; i < sz; i++) {
+            v[i] = other.v[i];
+        }
+    }
+
+    vector(int rows, int cols) {
+        if (rows < 1) error("wrong size");
+        sz = rows;
+        v = new T[rows];
+        if (v == 0) error("out of memory");
+        for (int i = 0; i < rows; i++) {
+            v[i] = T(cols);  // Создаём каждый внутренний вектор размера cols
+        }
+    }
+
     vector(vector&& other) {
         sz = other.sz;
         v = new T[sz];
@@ -87,6 +113,30 @@ public:
         return sum;
     }
 
+
+    vector& operator=(const vector& a) {
+        if (this == &a) return *this;  // защита от самоприсваивания
+
+        if (size() == a.size()) { // если размеры одинаковые, просто копируем элементы
+            for (int i = 0; i < sz; i++) {
+                v[i] = a.v[i];
+            }
+            return *this;
+        }
+
+
+        delete[] v; // если ни то, ни другое, удаляем
+        sz = a.sz;
+        v = new T[sz];
+        if (v == 0) error("out of memory");
+
+        for (int i = 0; i < sz; i++) {
+            v[i] = a.v[i];
+        }
+        return *this;
+    }
+
+
     vector& operator=(vector&&a) {
         if (this == &a) {
             return *this;// защита от самоприсваивания
@@ -112,33 +162,60 @@ public:
         return *this;
     }
 
-    void print() {
+    // vector operator <<(std::ostream& os) {
+    //     int a = size();
+    //         for (int i = 0; i<a; i++) {
+    //             os << elem(i);
+    //             if (i < a - 1) os << ", ";
+    //         }
+    //     return os;
+    // }
+    void print(bool is_matrix_row = false) {
         int s = size();
         std::cout << "[";
         // printf("[");
         for (int i = 0; i<s; i++) {
             std::cout << elem(i);
+            // elem(i).print();
             if (i < s - 1) std::cout << ", ";
         }
-        std::cout << "]" << std::endl;
+        std::cout << "]";
+
+        if (!is_matrix_row) std::cout << std::endl;
     }
 
+    void print_for_matrix() {
+        int s = size();
+        std::cout << "[";
+        // printf("[");
+        for (int i = 0; i<s; i++) {
+            // std::cout << elem(i);
+            elem(i).print(true);
+            if (i < s - 1) std::cout << ", ";
+        }
+        std::cout << "]";
+    }
 
-    friend vector&& lvalue_to_rvalue<T>(vector& x);
 
 
 };
 
 
 
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const vector<T>& v) {
-    int s = v.size();
-    os << "[";
-    for (int i = 0; i < s; i++) {
-        os << v[i];
-        if (i < s - 1) os << ", ";
-    }
-    os << "]";
-    return os;
-}
+// template <typename T>
+// std::ostream& operator<<(std::ostream& os, const vector<T>& v) {
+//     int s = v.size();
+//     os << "[";
+//     for (int i = 0; i < s; i++) {
+//         v.elem(i).print();
+//         if (i < s - 1) os << ", ";
+//     }
+//     os << "]";
+//     return os;
+// }
+//
+// std::ostream& operator<<(std::ostream& os, const myFloat& mF) {
+//     // std::cout<< c << abs(d) << std::endl;
+//     printf("%d.%04d", mF.c, abs(mF.d));
+//     return os;
+// }
