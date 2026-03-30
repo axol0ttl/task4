@@ -1,10 +1,11 @@
 #pragma once
 #include <stdlib.h>
 #include <iostream>
+#include <stdexcept>
 #include "mySatur.h"
-
-
-void error(const char* msg);//????? throw + catch
+//
+//
+// void error(const char* msg);//????? throw + catch
 
 template <typename T>
 class vector;
@@ -26,10 +27,17 @@ class vector {
     int sz;
 public:
     vector(int s) {
-        if (s<1) error("wrong size");
-        sz = s;
-        v = new T[s];
-        if (v==0) {error("out of memory");}
+        try {
+            // if (s<1) error("wrong size");
+            if (s < 1) throw std::runtime_error("wrong size");
+            sz = s;
+            v = new T[s];
+            if (v==0) throw std::runtime_error("out of memory");
+            // if (v==0) {error("out of memory");}
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
     }
 
     vector() {
@@ -39,27 +47,73 @@ public:
 
     vector(vector const& other) {
         sz = other.sz;
-        v = new T[sz];
-        if (v == 0) error("out of memory");
+        try {
+            v = new T[sz];
+            if (v == 0) throw std::runtime_error("out of memory");
+        }
+
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
+
         for (int i = 0; i < sz; i++) {
             v[i] = other.v[i];
         }
     }
 
     vector(int rows, int cols) {
-        if (rows < 1) error("wrong size");
-        sz = rows;
-        v = new T[rows];
-        if (v == 0) error("out of memory");
+        try {
+            // if (rows < 1) error("wrong size");
+            if (rows < 1 || cols < 1) throw std::runtime_error("wrong size");
+            // if (cols < 1) throw std::runtime_error("wrong size");
+            sz = rows;
+            v = new T[rows];
+            // if (v == 0) error("out of memory");
+            if (v == 0) throw std::runtime_error("out of memory");
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
         for (int i = 0; i < rows; i++) {
             v[i] = T(cols);  // Создаём каждый внутренний вектор размера cols
         }
     }
 
+    // vector(int rows, int cols, T val) {
+    //     try {
+    //         // if (rows < 1) error("wrong size");
+    //         if (rows < 1 || cols < 1) throw std::runtime_error("wrong size");
+    //         // if (cols < 1) throw std::runtime_error("wrong size");
+    //         sz = rows;
+    //         v = new T[rows];
+    //         // if (v == 0) error("out of memory");
+    //         if (v == 0) throw std::runtime_error("out of memory");
+    //
+    //         for (int i = 0; i < rows; i++) {
+    //             for (int j = 0; j < cols; j++) {
+    //                 v[i][j] = val; // Инициализируем каждый элемент значением val
+    //             }
+    //         }
+    //     }
+    //     catch (std::runtime_error& e) {
+    //         std::cerr << e.what() << std::endl;
+    //     }
+    //     for (int i = 0; i < rows; i++) {
+    //         v[i] = T(cols);  // Создаём каждый внутренний вектор размера cols
+    //
+    //     }
+    // }
+
     vector(vector&& other) {
         sz = other.sz;
-        v = new T[sz];
-        if (v == 0) error("out of memory");
+        try {
+            v = new T[sz];
+            // if (v == 0) error("out of memory");
+            if (v==0) throw std::runtime_error("out of memory");
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
         for (int i = 0; i < sz; i++) {
             v[i] = other.v[i];
         }
@@ -72,14 +126,26 @@ public:
         return sz;
     }
     T& operator[](int i) {
-        if (i < 0 || i >= sz) error("index out of range");
+        try {
+            if (i < 0 || i >= sz) throw std::runtime_error("index out of range");
+        }
+        // if (i < 0 || i >= sz) error("index out of range");
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
         return v[i];
     }
 
 
     const T& operator[](int i) const {
-        if (i < 0 || i >= sz) error("index out of range");
-        return v[i];
+        try {
+            if (i < 0 || i >= sz) throw std::runtime_error("index out of range");
+            // if (i < 0 || i >= sz) error("index out of range");
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
+            return v[i];
     }
 
     inline T& elem(int i) {
@@ -92,9 +158,14 @@ public:
 
     vector operator+(vector&a) {
         int s = size();
-        if (s != a.size())
-            error("Vector size mismatch");
-
+        try {
+            if (s != a.size())
+                throw std::runtime_error("vector size mismatch");
+                // error("Vector size mismatch");
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
         vector sum(s);
 
         for (int i = 0; i < s; i++)
@@ -105,8 +176,13 @@ public:
 
     vector operator-(vector&a) {
         int s = size();
-        if (s != a.size())
-            error("Vector size mismatch");
+        try {
+            if (s != a.size())
+                throw std::runtime_error("Vector size mismatch");
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
         vector sum(s);
         for (int i = 0; i < s; i++)
             sum.elem(i) = elem(i) - a.elem(i);
@@ -127,9 +203,14 @@ public:
 
         delete[] v; // если ни то, ни другое, удаляем
         sz = a.sz;
-        v = new T[sz];
-        if (v == 0) error("out of memory");
-
+        try {
+            v = new T[sz];
+            // if (v == 0) error("out of memory");
+            if (v == 0) throw std::runtime_error("out of memory");
+        }
+        catch (std::runtime_error& e) {
+            std::cerr << e.what() << std::endl;
+        }
         for (int i = 0; i < sz; i++) {
             v[i] = a.v[i];
         }
@@ -138,26 +219,42 @@ public:
 
 
     vector& operator=(vector&&a) {
-        if (this == &a) {
-            return *this;// защита от самоприсваивания
-        }
+        // if (this == &a) {
+        //     return *this;// защита от самоприсваивания
+        // }
+        //
+        // if (sz == a.sz) { // если размеры одинаковые
+        //
+        //     for (int i = 0; i < sz; i++) {
+        //         elem(i) = a.elem(i);
+        //     }
+        //     return *this;
+        // }
+        //
+        // delete [] v; // уничтожим прошлый массив и сделаем из него копию другого
+        // sz = a.sz;
+        // try {
+        //     v = new T[sz];
+        //     // if (v == 0) error("out of memory");
+        //     if (v == 0) throw std::runtime_error("out of memory");
+        // }
+        // catch (std::runtime_error& e) {
+        //     std::cerr << e.what() << std::endl;
+        // }
+        // for (int i = 0; i < sz; i++) {
+        //     v[i] = a.v[i];
+        // }
+        //
+        // // return *this;
+        // printf("\nya huesos\n");
+        if (this == &a) return *this;
+        delete[] v;
 
-        if (sz == a.sz) { // если размеры одинаковые
-
-            for (int i = 0; i < sz; i++) {
-                elem(i) = a.elem(i);
-            }
-            return *this;
-        }
-
-        delete [] v; // уничтожим прошлый массив и сделаем из него копию другого
+        v = a.v;
         sz = a.sz;
-        v = new T[sz];
 
-        if (v == 0) error("out of memory");
-        for (int i = 0; i < sz; i++) {
-            v[i] = a.v[i];
-        }
+        a.v = nullptr;
+        a.sz = 0;
 
         return *this;
     }
@@ -170,7 +267,7 @@ public:
     //         }
     //     return os;
     // }
-    void print(bool is_matrix_row = false) {
+    void print() {
         int s = size();
         std::cout << "[";
         // printf("[");
@@ -179,9 +276,7 @@ public:
             // elem(i).print();
             if (i < s - 1) std::cout << ", ";
         }
-        std::cout << "]";
-
-        if (!is_matrix_row) std::cout << std::endl;
+        std::cout << "]" << std::endl;
     }
 
     void print_for_matrix() {
@@ -189,11 +284,10 @@ public:
         std::cout << "[";
         // printf("[");
         for (int i = 0; i<s; i++) {
-            // std::cout << elem(i);
-            elem(i).print(true);
+            std::cout << elem(i);
             if (i < s - 1) std::cout << ", ";
         }
-        std::cout << "]";
+        std::cout << "]" << std::endl;
     }
 
 

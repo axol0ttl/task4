@@ -34,7 +34,9 @@ int main() {
 
     zalupa.print();
 
-    vector<vector<int>> zalupaa(2,4);
+    vector<vector<double>> zalupaa(2,4);
+    printf("-------\n");
+
     zalupaa.print();
     return 0;
 }
