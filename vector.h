@@ -7,17 +7,11 @@ template <typename T>
 class vector;
 
 // operator<< для mySatur (нужен для vector<mySatur>)
-inline std::ostream& operator<<(std::ostream& os, mySatur& x) {
-x.print();
-return os;
-}
+inline void operator<<(std::ostream& os, mySatur& x) {x.print();}
 
 // operator<< для vector<T> (нужен для vector<vector<…>>)
 template <typename T>
-inline std::ostream& operator<<(std::ostream& os, vector<T>& x) {
-x.print_for_matrix();
-return os;
-}
+inline void operator<<(std::ostream& os, vector<T>& x) {x.print();}
 
 template <typename T>
 class vector {
@@ -46,6 +40,7 @@ vector() : sz(99), v(new T[99]) {}
 // копирующий конструктор
 vector(const vector& other) {
     try {
+        sz = other.sz;
         v = new T[sz];
         if (v == 0) throw std::runtime_error("out of memory");
     } catch (std::runtime_error& e) {
@@ -183,14 +178,14 @@ void print() {
 }
 
 // Вызывается оператором << при печати матрицы (vector<vector<...>>)
-void print_for_matrix() {
-    std::cout << "[";
-    for (int i = 0; i < sz; i++) {
-        std::cout << elem(i);
-        if (i < sz - 1) std::cout << ", ";
-    }
-    std::cout << "]" << std::endl;
-}
-
+// void print_for_matrix() {
+//     std::cout << "[";
+//     for (int i = 0; i < sz; i++) {
+//         std::cout << elem(i);
+//         if (i < sz - 1) std::cout << ", ";
+//     }
+//     std::cout << "]" << std::endl;
+// }
+// //TODO сделать, чтобы были более красивые переносы
 
 };

@@ -23,14 +23,15 @@ int main() {
     x = y;
     // x.print();
 
-    y = x;
-    y.print();
+    // y = x;
+    // y.print();
+
     mySatur test = res2.lm(); //возвращает ссылкой последний элемент без проверок
     //test.print();
     vector<int> another_matrix(3);
 
-    x.print();
-    xxx.print();
+    // x.print();
+    // xxx.print();
 
     another_matrix.print();
 
@@ -38,5 +39,7 @@ int main() {
 
 
     matrix.print();
+    printf("\n\n\n");
+    xxx.print();
     return 0;
 }
