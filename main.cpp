@@ -27,16 +27,16 @@ int main() {
     y.print();
     mySatur test = res2.lm(); //возвращает ссылкой последний элемент без проверок
     //test.print();
-    vector<int> zalupa(3);
+    vector<int> another_matrix(3);
 
     x.print();
     xxx.print();
 
-    zalupa.print();
+    another_matrix.print();
 
-    vector<vector<double>> zalupaa(2,4);
-    printf("-------\n");
+    vector<vector<double>> matrix(2,4);
 
-    zalupaa.print();
+
+    matrix.print();
     return 0;
 }
