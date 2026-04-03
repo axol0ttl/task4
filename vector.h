@@ -11,7 +11,7 @@ inline void operator<<(std::ostream& os, mySatur& x) {x.print();}
 
 // operator<< для vector<T> (нужен для vector<vector<…>>)
 template <typename T>
-inline void operator<<(std::ostream& os, vector<T>& x) {x.print();}
+inline void operator<<(std::ostream& os, vector<T>& x) {x.print();} //?????
 
 template <typename T>
 class vector {
@@ -29,7 +29,7 @@ vector(int s) {
         sz = s;
         v  = new T[s];
         if (v == 0) throw std::runtime_error("out of memory");
-    } catch (std::runtime_error& e) {
+    } catch (std::runtime_error& e) {//????
         std::cerr << e.what() << std::endl;
     }
 }
@@ -52,7 +52,7 @@ vector(const vector& other) {
 }
 
 // конструктов матрицы: rows строк, каждая строка — T(cols)
-vector(int rows, int cols) {
+vector(int rows, int cols) {//???
     try {
         if (rows < 1 || cols < 1) throw std::runtime_error("wrong size");
         sz = rows;
@@ -156,7 +156,7 @@ vector& operator=(const vector& a) {
     return *this;
 }
 
-vector& operator=(vector&& a) noexcept {
+vector& operator=(vector&& a) {
     if (this == &a) return *this;
     delete[] v;
     v    = a.v;

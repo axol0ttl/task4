@@ -16,8 +16,7 @@ int main() {
     vector<mySatur> res = x + y; // сложение массивов
     res.print();
 
-    // vector res2 = std::move(res); // операция копирования
-    vector<mySatur> res2 = res; // 18 и 19 строка выполняют одно и то же, но в 19 самописная функция в vector.h
+    vector<mySatur> res2 = res;
     res2.print();
     // res2[2] = 123.2351; // index out of range
     x = y;
@@ -31,15 +30,11 @@ int main() {
     vector<int> another_matrix(3);
 
     // x.print();
-    // xxx.print();
+    xxx.print();
 
     another_matrix.print();
 
     vector<vector<double>> matrix(2,4);
-
-
     matrix.print();
-    printf("\n\n\n");
-    xxx.print();
     return 0;
 }
