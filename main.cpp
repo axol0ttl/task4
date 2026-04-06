@@ -1,6 +1,5 @@
 //
 // Created by Arseny on 11/03/2026.
-#include <iostream>
 #include "vector.h"
 #include "mySatur.h"
 
@@ -25,8 +24,6 @@ int main() {
     // y = x;
     // y.print();
 
-    mySatur test = res2.lm(); //возвращает ссылкой последний элемент без проверок
-    //test.print();
     vector<int> another_matrix(3);
 
     // x.print();

@@ -11,7 +11,7 @@ inline void operator<<(std::ostream& os, mySatur& x) {x.print();}
 
 // operator<< для vector<T> (нужен для vector<vector<…>>)
 template <typename T>
-inline void operator<<(std::ostream& os, vector<T>& x) {x.print();} //?????
+void operator<<(std::ostream& os, vector<T>& x) {x.print_for_matrix();} //?????
 
 template <typename T>
 class vector {
@@ -21,21 +21,6 @@ int sz;
 public:
 // конструкторы
 
-
-// одномерный вектор размера s
-vector(int s) {
-    try {
-        if (s < 1) throw std::runtime_error("wrong size");
-        sz = s;
-        v  = new T[s];
-        if (v == 0) throw std::runtime_error("out of memory");
-    } catch (std::runtime_error& e) {//????
-        std::cerr << e.what() << std::endl;
-    }
-}
-
-// конструктор по умолчанию (размер 99)
-vector() : sz(99), v(new T[99]) {}
 
 // копирующий конструктор
 vector(const vector& other) {
@@ -52,7 +37,7 @@ vector(const vector& other) {
 }
 
 // конструктов матрицы: rows строк, каждая строка — T(cols)
-vector(int rows, int cols) {//???
+vector(int rows=1, int cols=1) {//??? (TODO конструктор по умолчанию)
     try {
         if (rows < 1 || cols < 1) throw std::runtime_error("wrong size");
         sz = rows;
@@ -178,14 +163,14 @@ void print() {
 }
 
 // Вызывается оператором << при печати матрицы (vector<vector<...>>)
-// void print_for_matrix() {
-//     std::cout << "[";
-//     for (int i = 0; i < sz; i++) {
-//         std::cout << elem(i);
-//         if (i < sz - 1) std::cout << ", ";
-//     }
-//     std::cout << "]" << std::endl;
-// }
+void print_for_matrix() {
+    std::cout << "[";
+    for (int i = 0; i < sz; i++) {
+        std::cout << elem(i);
+        if (i < sz - 1) std::cout << ", ";
+    }
+    std::cout << "]";
+}
 // //TODO сделать, чтобы были более красивые переносы
 
 };
