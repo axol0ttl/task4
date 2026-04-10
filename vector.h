@@ -24,31 +24,28 @@ public:
 
 // копирующий конструктор
 vector(const vector& other) {
-    try {
         sz = other.sz;
         v = new T[sz];
-        if (v == 0) throw std::runtime_error("out of memory");
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
-        return;
-    }
-    for (int i = 0; i < sz; i++)
-        v[i] = other.v[i];
+        if (v == nullptr) {
+            throw std::runtime_error("out of memory");
+        }
+
+        for (int i = 0; i < sz; i++){
+            v[i] = other.v[i];
+        }
+
 }
 
-// конструктов матрицы: rows строк, каждая строка — T(cols)
-vector(int rows=1, int cols=1) {//??? (TODO конструктор по умолчанию)
-    try {
-        if (rows < 1 || cols < 1) throw std::runtime_error("wrong size");
-        sz = rows;
-        v  = new T[rows];
-        if (v == 0) throw std::runtime_error("out of memory");
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
-        return;
-    }
+// конструктов матрицы и просто массива: rows строк, каждая строка — T(cols)
+vector(int s = 1, const T& val = T()) {
+    if (s < 1)
+        throw std::runtime_error("Wrong size");
+    sz = s;
+    v = new T[sz];
+    if (v == nullptr)
+        throw std::runtime_error("Not enough memory");
     for (int i = 0; i < sz; i++)
-        v[i] = T(cols);
+        v[i] = val;
 }
 
 // мув-конструктор (крадём указатель, не копируем элементы)
@@ -69,48 +66,34 @@ inline int size() const { return sz; }
 // Доступ к элементам
 
 T& operator[](int i) {
-    try {
-        if (i < 0 || i >= sz) throw std::runtime_error("index out of range");
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
+    if (i < 0 || i >= sz) throw std::runtime_error("index out of range");
+    {
+        return v[i];
     }
-    return v[i];
 }
 
 const T& operator[](int i) const {
-    try {
         if (i < 0 || i >= sz) throw std::runtime_error("index out of range");
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
-    }
-    return v[i];
+    {return v[i];}
 }
 
 inline T& elem(int i) { return v[i]; }
 inline T& lm()        { return v[sz - 1]; }
 
-// операции сложения и вычитания
-
-vector operator+(vector& a) {
+vector operator+(const vector<T>& a) const {
     int s = size();
-    try {
-        if (s != a.size()) throw std::runtime_error("vector size mismatch");
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
-    }
+    if (s != a.size()) throw std::runtime_error("vector size mismatch");
     vector sum(s);
     for (int i = 0; i < s; i++)
-        sum.elem(i) = elem(i) + a.elem(i);
+        sum.v[i] = v[i] + a.v[i];
     return sum;
 }
 
-vector operator-(vector& a) {
+
+
+vector operator-(const vector<T>& a) const {
     int s = size();
-    try {
-        if (s != a.size()) throw std::runtime_error("vector size mismatch");
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
-    }
+    if (s != a.size()) throw std::runtime_error("vector size mismatch");
     vector sum(s);
     for (int i = 0; i < s; i++)
         sum.elem(i) = elem(i) - a.elem(i);
@@ -130,23 +113,20 @@ vector& operator=(const vector& a) {
 
     delete[] v;
     sz = a.sz;
-    try {
         v = new T[sz];
-        if (v == 0) throw std::runtime_error("out of memory");
-    } catch (std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
-    }
-    for (int i = 0; i < sz; i++)
+        if (v == nullptr) throw std::runtime_error("out of memory");
+    for (int i = 0; i < sz; i++) {
         v[i] = a.v[i];
+    }
     return *this;
 }
 
 vector& operator=(vector&& a) {
     if (this == &a) return *this;
     delete[] v;
-    v    = a.v;
-    sz   = a.sz;
-    a.v  = nullptr;
+    v = a.v;
+    sz = a.sz;
+    a.v = nullptr;
     a.sz = 0;
     return *this;
 }
@@ -171,6 +151,5 @@ void print_for_matrix() {
     }
     std::cout << "]";
 }
-// //TODO сделать, чтобы были более красивые переносы
 
 };
