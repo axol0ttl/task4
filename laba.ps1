@@ -17,12 +17,12 @@ while ($true) {
 
         [System.Windows.Forms.MessageBox]::Show(
             "КОЧ БРАТАН КОЧ",
-            "ЛАБОРАТОРНАЯ РАБОТА",
+            "КОЧ ГОЛДА",
             [System.Windows.Forms.MessageBoxButtons]::OK,
             [System.Windows.Forms.MessageBoxIcon]::Information
         ) | Out-Null
 
-        Start-Sleep -Milliseconds 300
+        Start-Sleep -Milliseconds 150
     }
     catch {
         Write-Host "Ошибка: $_"
